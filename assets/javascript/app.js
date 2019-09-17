@@ -45,8 +45,26 @@ var quizQuestions = [
     var lost = 0;
     var timer;
 
+    //Timer
+    
+    function timeUp() {
+        clearInterval(timer);
+    }
+    
+    function countDown() {
+        counter--;
+
+        $('#time').html('Timer: ' + counter);
+
+        if (counter === 0) {
+            timeUp();
+        }
+    }
+
     //Display questions and options
     function loadQuestions() {
+        counter = 30;
+        timer = setInterval(countDown, 1000)
         var question = quizQuestions[currentQuestion].question;
         var choices = quizQuestions[currentQuestion].choices;
 
