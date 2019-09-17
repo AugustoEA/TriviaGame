@@ -45,10 +45,25 @@ var quizQuestions = [
     var lost = 0;
     var timer;
 
+// time's up
+    function nextQuestion() {
+        var isQuestionOver = (quizQuestions.length - 1) === currentQuestion;
+        if (isQuestionOver) {
+
+        } else {
+            currentQuestion++;
+            loadChoices();
+        }
+    }
+
     //Timer
     
     function timeUp() {
         clearInterval(timer);
+
+        lost++;
+
+        nextQuestion();
     }
     
     function countDown() {
@@ -63,7 +78,7 @@ var quizQuestions = [
 
     //Display questions and options
     function loadQuestions() {
-        counter = 30;
+        counter = 5;
         timer = setInterval(countDown, 1000)
         var question = quizQuestions[currentQuestion].question;
         var choices = quizQuestions[currentQuestion].choices;
@@ -83,5 +98,20 @@ var quizQuestions = [
 
         return result;
     }
+
+    //Event listener
+        $(document).on('click', '.choice', function() {
+            var selectedAnswer = $(this).attr('data-answer');
+            var correctAnswer = quizQuestions[currentQuestion].correctAnswer;
+
+            if (correctAnswer === selectedAnswer) {
+                score++
+                nextQuestion();
+            } else {
+                lost++;
+                nextQuestion();
+            }
+            console.log(selectedAnswer);
+        });
 
     loadQuestions();
