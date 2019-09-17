@@ -59,15 +59,15 @@ var quizQuestions = [
 // Images
 
     var winImages = [
-        '..assets/images/victory.gif',
-        '..assets/images/victory2.gif',
-        '..assets/images/victory3.gif',
+        './assets/images/victory.gif',
+        './assets/images/victory2.gif',
+        './assets/images/victory3.gif',
     ];
 
     var loseImages = [
-        '..assets/images/Lost.gif',
-        '..assets/images/Lost2.gif',
-        '..assets/images/Lost3.gif',
+        './assets/images/lost.gif',
+        './assets/images/lost2.gif',
+        './assets/images/lost3.gif',
     ];
 
 //Timer
@@ -76,8 +76,8 @@ var quizQuestions = [
         clearInterval(timer);
 
         lost++;
-
-        nextQuestion();
+        preloadImage('lost');
+        setTimeout(nextQuestion, 2 * 1000);
     }
     
     function countDown() {
@@ -92,7 +92,7 @@ var quizQuestions = [
 
 //Display questions and options
     function loadQuestions() {
-        counter = 5;
+        counter = 15;
         timer = setInterval(countDown, 1000)
         var question = quizQuestions[currentQuestion].question;
         var choices = quizQuestions[currentQuestion].choices;
@@ -122,10 +122,12 @@ var quizQuestions = [
 
             if (correctAnswer === selectedAnswer) {
                 score++;
-                nextQuestion();
+                preloadImage('win');
+                setTimeout(nextQuestion, 2 * 1000);
             } else {
                 lost++;
-                nextQuestion();
+                preloadImage('lost')
+                setTimeout(nextQuestion, 2 * 1000);
             }
             console.log(selectedAnswer);
         });
@@ -144,7 +146,7 @@ var quizQuestions = [
 // Reseter
 
         $(document).on('click', '#reset', function() {
-            counter = 5;
+            counter = 15;
             currentQuestion = 0 ;
             score = 0;
             lost = 0;
@@ -162,5 +164,38 @@ var quizQuestions = [
             return `Remaining Question: ${remainingQuestions}/${totalQuestion}`;
         }
 
-    loadQuestions();
+// Loading images
+
+        function randomImage(images) {
+            var random = Math.floor(Math.random() * images.length);
+            var randomImage = images[random];
+            return randomImage;
+        }
+
+    function preloadImage(status) {
+        var correctAnswer = quizQuestions[currentQuestion].correctAnswer;
+
+
+        if (status === 'win') {
+            $('#game').html(`
+                <p class='preload-image'>You chose wisely!!!</p>
+                <img src='${randomImage(winImages)}'>
+            `);
+        } else {
+            $('#game').html(`
+                <p class='preload-image'>You chose poorly!!!</p>
+                <img src='${randomImage(loseImages)}'>
+
+            `);
+
+        }
+
+    }
+
+    $('#start').click(function(){
+        $('#start').remove();
+        $('#time').html(counter);
+        loadQuestions()
+
+    });
 
