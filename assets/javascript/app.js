@@ -40,7 +40,7 @@ var quizQuestions = [
 
     //Initial Values
     var counter = 30;
-    var currentQuestion = 0;
+    var currentQuestion = 0 ;
     var score = 0;
     var lost = 0;
     var timer;
@@ -53,6 +53,7 @@ var quizQuestions = [
         $('#time').html('Time Left: ' + counter);
         $('#game').html(`
         <h4>${question}</h4>
+        ${loadChoices(choices)  }
     `);
     }
 

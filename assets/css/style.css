@@ -1,0 +1,9 @@
+
+
+
+.choice {
+    border: 2px solid green;
+    padding: 15px;
+    border-radius: 5px;
+    cursor: pointer;
+}
