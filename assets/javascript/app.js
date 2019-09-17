@@ -49,10 +49,10 @@ var quizQuestions = [
     function nextQuestion() {
         var isQuestionOver = (quizQuestions.length - 1) === currentQuestion;
         if (isQuestionOver) {
-
+            displayResult();
         } else {
             currentQuestion++;
-            loadChoices();
+            loadQuestions();
         }
     }
 
@@ -69,7 +69,7 @@ var quizQuestions = [
     function countDown() {
         counter--;
 
-        $('#time').html('Timer: ' + counter);
+        $('#time').html('Time: ' + counter);
 
         if (counter === 0) {
             timeUp();
@@ -83,7 +83,7 @@ var quizQuestions = [
         var question = quizQuestions[currentQuestion].question;
         var choices = quizQuestions[currentQuestion].choices;
 
-        $('#time').html('Time Left: ' + counter);
+        $('#time').html('Time: ' + counter);
         $('#game').html(`
         <h4>${question}</h4>
         ${loadChoices(choices)  }
@@ -101,11 +101,12 @@ var quizQuestions = [
 
     //Event listener
         $(document).on('click', '.choice', function() {
+            clearInterval(timer);
             var selectedAnswer = $(this).attr('data-answer');
             var correctAnswer = quizQuestions[currentQuestion].correctAnswer;
 
             if (correctAnswer === selectedAnswer) {
-                score++
+                score++;
                 nextQuestion();
             } else {
                 lost++;
@@ -113,5 +114,16 @@ var quizQuestions = [
             }
             console.log(selectedAnswer);
         });
+
+        function displayResult () {
+            var result = `
+            <p> You get ${score} questions(s) right</p>
+            <p> You missed ${lost} questions(s)</p>
+            <p>Total Questions ${quizQuestions.length} questions(s) right</p>
+            <button class='btn btn-primary' id='reset'>Reset Game</button>
+            ;`
+
+            $('#game').html(result);
+        }
 
     loadQuestions();
