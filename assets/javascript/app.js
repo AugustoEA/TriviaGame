@@ -39,7 +39,7 @@ var quizQuestions = [
     // console.log(quizQuestions);
 
     //Initial Values
-    var counter = 30;
+    var counter = 5;
     var currentQuestion = 0 ;
     var score = 0;
     var lost = 0;
@@ -56,7 +56,21 @@ var quizQuestions = [
         }
     }
 
-    //Timer
+// Images
+
+    var winImages = [
+        '..assets/images/victory.gif',
+        '..assets/images/victory2.gif',
+        '..assets/images/victory3.gif',
+    ];
+
+    var loseImages = [
+        '..assets/images/Lost.gif',
+        '..assets/images/Lost2.gif',
+        '..assets/images/Lost3.gif',
+    ];
+
+//Timer
     
     function timeUp() {
         clearInterval(timer);
@@ -76,7 +90,7 @@ var quizQuestions = [
         }
     }
 
-    //Display questions and options
+//Display questions and options
     function loadQuestions() {
         counter = 5;
         timer = setInterval(countDown, 1000)
@@ -86,7 +100,8 @@ var quizQuestions = [
         $('#time').html('Time: ' + counter);
         $('#game').html(`
         <h4>${question}</h4>
-        ${loadChoices(choices)  }
+        ${loadChoices(choices)}
+        ${loadRemaining()}
     `);
     }
 
@@ -99,7 +114,7 @@ var quizQuestions = [
         return result;
     }
 
-    //Event listener
+//Event listener
         $(document).on('click', '.choice', function() {
             clearInterval(timer);
             var selectedAnswer = $(this).attr('data-answer');
@@ -121,9 +136,31 @@ var quizQuestions = [
             <p> You missed ${lost} questions(s)</p>
             <p>Total Questions ${quizQuestions.length} questions(s) right</p>
             <button class='btn btn-primary' id='reset'>Reset Game</button>
-            ;`
+            `;
 
             $('#game').html(result);
         }
 
+// Reseter
+
+        $(document).on('click', '#reset', function() {
+            counter = 5;
+            currentQuestion = 0 ;
+            score = 0;
+            lost = 0;
+            timer = null;
+
+            loadQuestions();          
+          
+// console.log('Test');
+        });
+
+        function loadRemaining () {
+            var remainingQuestions = quizQuestions.length - (currentQuestion + 1);
+            var totalQuestion = quizQuestions.length;
+
+            return `Remaining Question: ${remainingQuestions}/${totalQuestion}`;
+        }
+
     loadQuestions();
+
